@@ -89,6 +89,43 @@ sudo chown -R "$nonroot_user":"$nonroot_user" /var/log/infra-demo
 log_info  "Directories created and permissions set"
 
 #==========================================
+#Demo Service Deployment
+#==========================================
+log_info "Deploying demo service..."
+
+#Copy application files(if not already there)
+if [ ! -f /opt/infra-demo/app.py ]; then
+	log_info "Copying application files..."
+	sudo cp ~/infra-project/opt/infra-demo/app.py /opt/infra-demo/ 2>/dev/null || echo "app.py will be created manually"
+	sudo chmod +x /opt/infra-demo/app/py
+else 
+	log_warn "app.py already exists, skipping"
+fi
+
+#Copy environment file
+if [ ! -f /opt/infra-demo/config.env ]; then
+	log_info "Copying environment file..."
+	sudo cp ~/infra-project/config/infra-demo.env /opt/infra-demo/config.env
+	sudo chmod 600 /opt/infra-demo/config.env
+else
+	log_warn "config.env already exists, skipping"
+fi
+
+#Install systemd service
+if [ ! -f /etc/systemd/system/infra-demo.service ]; then
+	log_info "Installing systemd service..."
+	sudo cp ~/infra-project/systemd/infra-demo.service /etc/systemd/system/
+	sudo systemctl daemon reload
+else
+	log_warn "Service file already exists, updating..."
+	sudo cp ~/infra-project/systemd/infra-demo.service /etc/systemd/system/
+	sudo systemctl daemon-reload
+fi
+
+#Enable and start service
+sudo systemctl enable infra-demo
+sudo systemctl start infra-demo
+#==========================================
 #Verification
 #==========================================
 log_info "===Verification==="

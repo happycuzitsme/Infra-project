@@ -1,0 +1,27 @@
+[Unit]
+Description=Infrastructure Demo Health Service
+Documentation=https://github.com/happycuzitsme/infra-project
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=deployer
+Group=deployer
+WorkingDirectory=/opt/infra-demo
+EnvironmentFile=/opt/infra-demo/config.env
+ExecStart=/usr/bin/python3 /opt/infra-demo/app.py
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+#Security Hardening
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/log/infra-demo
+
+[Install]
+WantedBy=multi-user.target
+
