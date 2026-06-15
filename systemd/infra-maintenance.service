@@ -1,0 +1,10 @@
+[Unit]
+Description=Infra Maintainance- Clean old logs
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/find /var/log/infra-demo -name "*/log" -mtime +7 -delete
+ExecStart=/usr/bin/journalctl --vaccum-time=7d
+User=root
+
