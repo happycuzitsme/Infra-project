@@ -1,4 +1,4 @@
-```markdown
+
 # 🖥️ Infrastructure Provisioning Project
 
 > A production-ready Linux server baseline with automated provisioning, systemd service, security hardening, and reboot validation.
